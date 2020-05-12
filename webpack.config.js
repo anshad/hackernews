@@ -1,5 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-module.exports = {
+const nodeExternals = require('webpack-node-externals');
+
+const common = {
   devtool: 'cheap-module-source-map',
   module: {
     rules: [
@@ -9,7 +10,7 @@ module.exports = {
         loader: 'babel-loader',
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /(\.s[ac]ss|\.css)$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
@@ -17,9 +18,19 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: 'index.html',
-    }),
-  ],
 };
+module.exports = [
+  {
+    ...common,
+    entry: './src/client',
+    output: {
+      path: `${__dirname}/public`,
+    },
+  },
+  {
+    ...common,
+    target: 'node',
+    entry: './src/server',
+    externals: [nodeExternals()],
+  },
+];

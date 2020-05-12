@@ -1,10 +1,11 @@
 # Hackernews
 
-Hackernews clone built with react!
+Hackernews clone built with react server side rendering!
 
 ## Development
 
     yarn
+    yarn dev
     yarn start
 
 ## Other Commands
@@ -12,6 +13,7 @@ Hackernews clone built with react!
 - `yarn lint` - Run eslint for code validation
 - `yarn build` - Build for production
 - `yarn dev` - Build for development
+- `yarn watch` - Watch for file changes
 
 ## This source code covers usage of the following
 
@@ -20,10 +22,10 @@ Hackernews clone built with react!
 - Bundler - Webpack
 - Transpiler - Babel
 - Linter - eslint
-- CSS pre-processor - SASS/SCSS
 - Package manager - Yarn/NPM
 - Git
 - Editor configuration - Prettier, VS Code
 - Markdown
-- CSS Framework - Bootstrap
 - React Functional Component
+- Express
+- Styled Components

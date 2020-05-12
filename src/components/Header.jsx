@@ -1,10 +1,10 @@
-import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-export const Header = () => {
-  return (
-    <Row>
-      <Col className='header'>Hackernews</Col>
-    </Row>
-  );
-};
+import styled from 'styled-components';
+
+const Header = styled.div`
+  text-align: center;
+  background-color: #f6f6ef;
+  color: #555555;
+  padding: 15px;
+`;
+
+export default Header;

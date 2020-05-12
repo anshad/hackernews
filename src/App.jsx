@@ -1,14 +1,13 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import { Header } from './components/Header';
-import './App.scss';
+import Container from './components/Container';
+import Header from './components/Header';
 
-function App() {
+const App = () => {
   return (
-    <Container fluid>
-      <Header />
+    <Container>
+      <Header>Hackernews</Header>
     </Container>
   );
-}
+};
 
 export default App;
