@@ -31,6 +31,7 @@ app.use((req, res) => {
             <style>
             body {
                 margin: 0 auto;
+                background-color: #F6F6EF;
             }
             </style>
         </head>

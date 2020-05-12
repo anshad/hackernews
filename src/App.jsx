@@ -1,11 +1,15 @@
 import React from 'react';
 import Container from './components/Container';
 import Header from './components/Header';
+import NewsList from './components/NewsList';
 
 const App = () => {
   return (
     <Container>
-      <Header>Hackernews</Header>
+      <Header>
+        <h3>Hackernews</h3>
+      </Header>
+      <NewsList></NewsList>
     </Container>
   );
 };
