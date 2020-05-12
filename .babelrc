@@ -1,0 +1,17 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": "3.0.0",
+        "targets": { "browsers": ["defaults", "not ie 11", "not op_mini all"] }
+      }
+    ],
+    "@babel/react"
+  ],
+  "plugins": [
+    "@babel/proposal-class-properties",
+    "@babel/syntax-dynamic-import"
+  ]
+}
