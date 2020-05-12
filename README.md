@@ -26,3 +26,4 @@ Hackernews clone built with react!
 - Editor configuration - Prettier, VS Code
 - Markdown
 - CSS Framework - Bootstrap
+- React Functional Component

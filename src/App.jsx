@@ -1,15 +1,12 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Header } from './components/Header';
 import './App.scss';
 
 function App() {
   return (
     <Container fluid>
-      <Row>
-        <Col className='header'>Hackernews</Col>
-      </Row>
+      <Header />
     </Container>
   );
 }
