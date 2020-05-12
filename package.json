@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-eslint": "^10.1.0",
     "bootstrap": "^4.4.1",
     "core-js": "3",
     "react": "^16.13.1",
@@ -13,7 +14,8 @@
   "scripts": {
     "start": "webpack-dev-server --open --port 3000 --compress --mode development",
     "dev": "webpack --mode development --progress",
-    "build": "webpack --mode production --progress"
+    "build": "webpack --mode production --progress",
+    "lint": "eslint src/**/*.js"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -23,6 +25,11 @@
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
     "html-webpack-plugin": "^4.0.0-beta.14",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
