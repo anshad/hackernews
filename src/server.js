@@ -1,54 +1,88 @@
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+import fetch from 'node-fetch';
+import { promises } from 'fs';
+import { matchPath, StaticRouter } from 'react-router-dom';
+import routes from './routes';
 import App from './App';
-import reload from 'reload';
 
-const app = express();
-const port = 4000;
+global.fetch = fetch;
 
-app.use(express.static('public'));
+const { PORT = 3000, NODE_ENV = 'development' } = process.env;
 
-const dev = process.env.NODE_ENV === 'development';
+const IN_PROD = NODE_ENV === 'production';
 
-if (dev) {
-  reload(app);
-}
+(async () => {
+  const manifest = IN_PROD
+    ? JSON.parse(await promises.readFile('public/manifest.json', 'utf8'))
+    : {};
 
-app.use((req, res) => {
-  const sheet = new ServerStyleSheet();
-  try {
-    const html = renderToString(sheet.collectStyles(<App />));
-    const styleTags = sheet.getStyleTags();
+  const app = express();
 
-    res.send(`<!DOCTYPE html>
-    <html lang="en">
+  app.use(express.static('public'));
+
+  app.get('/favicon.ico', (req, res) => res.sendStatus(404));
+
+  app.get('/*', async (req, res) => {
+    let promise = Promise.resolve(null);
+
+    routes.some((route) => {
+      const match = matchPath(req.path, route);
+
+      if (match && route.loadData) {
+        promise = route.loadData(match);
+      }
+
+      return match;
+    });
+
+    const data = await promise;
+
+    const context = data ? { data } : {};
+
+    const html = renderToString(
+      <StaticRouter location={req.url} context={context}>
+        <App />
+      </StaticRouter>,
+    );
+    let payload = `
+      <!DOCTYPE html>
+      <html lang='en'>
         <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Hackernews</title>
-            <style>
-            body {
-                margin: 0 auto;
-                background-color: #F6F6EF;
-            }
-            </style>
+          <meta charset='utf-8'>
+          <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+          <title>Hackernews</title>
+          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
+          <link rel='stylesheet' href='/${
+            IN_PROD ? manifest['main.css'] : 'main.css'
+          }' />
         </head>
         <body>
-            <noscript>You need to enable JavaScript to run this app.</noscript>
-            <div id="root">${html}</div>
-            <script src="main.js" async></script>
-            ${dev ? '<script src="/reload/reload.js" async></script>' : ''}
+          <div id='app'>${html}</div>
+          <script id='state'>
+            window.__STATE__ = ${JSON.stringify({ data })}
+          </script>
+          <script src='/${
+            IN_PROD ? manifest['main.js'] : 'main.js'
+          }' defer></script>
         </body>
-    </html>`);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    sheet.seal();
-  }
-});
+      </html>
+    `.trim();
 
-app.listen(port, () => {
-  console.log(`Server started at port ${port}`);
-});
+    if (IN_PROD) {
+      payload = payload.split(/\s{2,}/).join('');
+    }
+
+    res.send(payload);
+  });
+
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.sendStatus(500);
+  });
+
+  app.listen(PORT, () =>
+    console.log(`Server started at http://localhost:${PORT}`),
+  );
+})();

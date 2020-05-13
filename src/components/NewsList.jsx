@@ -1,25 +1,54 @@
-import React from 'react';
-import Table from './table';
+import React, { useEffect, useState } from 'react';
+import { fetchStories } from '../api';
 
-const NewsList = () => {
+const NewsList = ({ match, staticContext }) => {
+  const { data } = staticContext || window.__STATE__ || {};
+
+  const [stories, setStories] = useState(data);
+
+  useEffect(() => {
+    if (!stories) {
+      (async () => setStories(await fetchStories()))();
+    }
+  }, []);
+
+  if (!stories) {
+    return <h4>Loading...</h4>;
+  }
+
   return (
-    <Table>
-      <Table.TableHead>
-        <Table.TableHeadRow>
-          <Table.TableHeadColumn>Comments</Table.TableHeadColumn>
-          <Table.TableHeadColumn>Vote Count</Table.TableHeadColumn>
-          <Table.TableHeadColumn>Up Vote</Table.TableHeadColumn>
-          <Table.TableHeadColumn>News Details</Table.TableHeadColumn>
-        </Table.TableHeadRow>
-      </Table.TableHead>
-      <Table.TableBody>
-        <Table.TableBodyRow className='noRecords'>
-          <Table.TableBodyColumn colSpan={4} className='noRecords'>
-            No records found!
-          </Table.TableBodyColumn>
-        </Table.TableBodyRow>
-      </Table.TableBody>
-    </Table>
+    <table className='newsList'>
+      <thead>
+        <tr>
+          <th>Comments</th>
+          <th>Vote Count</th>
+          <th>Up Vote</th>
+          <th className='textLeft'>News Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {stories.hits.length == 0 ? (
+          <tr className='noRecords'>
+            <td colSpan={4} className='noRecords'>
+              No records found!
+            </td>
+          </tr>
+        ) : (
+          stories.hits.map((item, index) => {
+            return (
+              <tr
+                key={item.objectID}
+                className={index % 2 == 0 ? 'even' : 'odd'}>
+                <td className='textCenter'>{item.num_comments}</td>
+                <td className='textCenter'>{item.points}</td>
+                <td className='textCenter'>#</td>
+                <td>{item.title}</td>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
+    </table>
   );
 };
 

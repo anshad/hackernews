@@ -1,16 +1,19 @@
 import React from 'react';
-import Container from './components/Container';
-import Header from './components/Header';
-import NewsList from './components/NewsList';
+import { Link, Switch, Route } from 'react-router-dom';
+import routes from './routes';
 
-const App = () => {
+const App = (props) => {
   return (
-    <Container>
-      <Header>
-        <h3>Hackernews</h3>
-      </Header>
-      <NewsList></NewsList>
-    </Container>
+    <>
+      <header>Hackernews</header>
+      <main>
+        <Switch>
+          {routes.map((route, index) => (
+            <Route key={index} {...route} />
+          ))}
+        </Switch>
+      </main>
+    </>
   );
 };
 

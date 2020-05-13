@@ -1,0 +1,43 @@
+body {
+  margin: 0 auto;
+  font-family: Roboto;
+  background-color: #f6f6ef;
+}
+#app {
+  margin: 0;
+}
+header {
+  background-color: #555555;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+}
+.newsList {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  thead {
+    background-color: #ff6801;
+    color: #ffffff;
+  }
+  tbody,
+  thead {
+    td,
+    th {
+      padding: 5px;
+    }
+  }
+}
+.textLeft {
+  text-align: left;
+}
+.textCenter {
+  text-align: center;
+}
+.even {
+  background-color: #f6f6ef;
+}
+.odd {
+  background-color: #e5e6df;
+}

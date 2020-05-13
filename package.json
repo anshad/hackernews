@@ -1,28 +1,32 @@
 {
   "name": "hackernews",
   "version": "0.1.0",
+  "description": "Hackernews clone with react server side rendering",
   "private": true,
+  "author": "Anshad Vattapoyil <anshad.musafir@gmail.com>",
+  "license": "MIT",
   "main": "dist/main.js",
   "dependencies": {
     "babel-eslint": "^10.1.0",
     "core-js": "3",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.5",
-    "styled-components": "^5.1.0"
+    "source-map-support": "^0.5.19"
   },
   "scripts": {
-    "start": "node dist/main.js",
-    "watch": "webpack --mode development --watch && nodemon dist/main",
-    "dev": "rm -rf dist public && webpack --mode development --progress",
-    "build": "rm -rf dist public && webpack --mode production --progress",
+    "predev": "rm -rf dist public",
+    "dev": "webpack --watch --mode development",
+    "prebuild": "rm -rf dist public",
+    "build": "webpack --progress --mode production",
+    "start": "NODE_ENV=production node .",
     "lint": "eslint src/**/*"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
@@ -32,13 +36,29 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
     "nodemon": "^2.0.3",
-    "reload": "^3.0.4",
+    "nodemon-webpack-plugin": "^4.3.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "standard": "^14.3.4",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
+    "webpack-livereload-plugin": "^2.3.0",
+    "webpack-manifest-plugin": "^2.2.0",
     "webpack-node-externals": "^1.7.2"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "env": [
+      "browser",
+      "node"
+    ],
+    "ignore": [
+      "dist",
+      "public"
+    ]
   }
 }
