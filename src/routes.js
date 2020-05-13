@@ -6,7 +6,12 @@ const routes = [
     path: '/',
     exact: true,
     component: NewsList,
-    loadData: fetchStories,
+    loadData: () => fetchStories(1),
+  },
+  {
+    path: '/page/:number',
+    component: NewsList,
+    loadData: ({ params: { number } }) => fetchStories(number),
   },
 ];
 

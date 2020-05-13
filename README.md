@@ -6,14 +6,13 @@ Hackernews clone built with react server side rendering!
 
     yarn
     yarn dev
-    yarn start
 
 ## Other Commands
 
 - `yarn lint` - Run eslint for code validation
 - `yarn build` - Build for production
-- `yarn dev` - Build for development
-- `yarn watch` - Watch for file changes
+- `yarn dev` - Build for development and start dev server
+- `yarn start` - Start dev server
 
 ## This source code covers usage of the following
 
@@ -26,6 +25,9 @@ Hackernews clone built with react server side rendering!
 - Git
 - Editor configuration - Prettier, VS Code
 - Markdown
-- React Functional Component
+- React Functional/Class Component
 - Express
-- Styled Components
+- CSS pre-processor - SCSS
+- React Router
+- React Hooks
+- Browser List

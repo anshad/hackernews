@@ -1,55 +1,123 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Pagination from './Pagination';
 import { fetchStories } from '../api';
 
-const NewsList = ({ match, staticContext }) => {
-  const { data } = staticContext || window.__STATE__ || {};
+class NewsList extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const [stories, setStories] = useState(data);
+    const { staticContext, match } = this.props;
+    const { data } = staticContext || window.__STATE__ || {};
+    const { number } = match.params || 1;
 
-  useEffect(() => {
-    if (!stories) {
-      (async () => setStories(await fetchStories()))();
-    }
-  }, []);
+    this.state = {
+      stories: data,
+      page: number,
+    };
 
-  if (!stories) {
-    return <h4>Loading...</h4>;
+    this.nextPage = this.nextPage.bind(this);
+    this.previousPage = this.previousPage.bind(this);
   }
 
-  return (
-    <table className='newsList'>
-      <thead>
-        <tr>
-          <th>Comments</th>
-          <th>Vote Count</th>
-          <th>Up Vote</th>
-          <th className='textLeft'>News Details</th>
-        </tr>
-      </thead>
-      <tbody>
-        {stories.hits.length == 0 ? (
-          <tr className='noRecords'>
-            <td colSpan={4} className='noRecords'>
-              No records found!
-            </td>
-          </tr>
-        ) : (
-          stories.hits.map((item, index) => {
-            return (
-              <tr
-                key={item.objectID}
-                className={index % 2 == 0 ? 'even' : 'odd'}>
-                <td className='textCenter'>{item.num_comments}</td>
-                <td className='textCenter'>{item.points}</td>
-                <td className='textCenter'>#</td>
-                <td>{item.title}</td>
+  componentDidMount() {
+    const { stories } = this.state;
+    if (!stories) {
+      (async () => {
+        const { page } = this.state;
+        this.setState({ stories: await fetchStories(page) });
+      })();
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({ stories: { hits: [] } });
+  }
+
+  nextPage() {
+    const { history } = this.props;
+    this.setState(
+      (prevState) => {
+        return { page: parseInt(prevState.page, 10) + 1 };
+      },
+      () => {
+        const { page } = this.state;
+        history.push(`/page/${page}`);
+        (async () => {
+          this.setState({ stories: await fetchStories(page) });
+        })();
+      },
+    );
+  }
+
+  previousPage() {
+    const { history } = this.props;
+    this.setState(
+      (prevState) => {
+        if (prevState.page > 1) {
+          return { page: parseInt(prevState.page, 10) - 1 };
+        }
+      },
+      () => {
+        const { page } = this.state;
+        history.push(`/page/${page}`);
+        (async () => {
+          this.setState({ stories: await fetchStories(page) });
+        })();
+      },
+    );
+  }
+
+  render() {
+    const { stories } = this.state;
+    if (!stories) {
+      return <h4 className='textCenter'>Loading...</h4>;
+    }
+
+    return (
+      <>
+        <table className='newsList'>
+          <thead>
+            <tr>
+              <th>Comments</th>
+              <th>Vote Count</th>
+              <th>Up Vote</th>
+              <th className='textLeft'>News Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stories.hits.length === 0 ? (
+              <tr className='noRecords'>
+                <td colSpan={4} className='noRecords'>
+                  No records found!
+                </td>
               </tr>
-            );
-          })
-        )}
-      </tbody>
-    </table>
-  );
+            ) : (
+              stories.hits.map((item, index) => {
+                return (
+                  <tr
+                    key={item.objectID}
+                    className={index % 2 === 0 ? 'even' : 'odd'}>
+                    <td className='textCenter'>{item.num_comments}</td>
+                    <td className='textCenter'>{item.points}</td>
+                    <td className='textCenter'>#</td>
+                    <td>{item.title}</td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+        <Pagination onNext={this.nextPage} onPrevious={this.previousPage} />
+      </>
+    );
+  }
+}
+
+NewsList.propTypes = {
+  staticContext: PropTypes.shape({}).isRequired,
+  match: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 export default NewsList;

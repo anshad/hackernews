@@ -1,14 +1,17 @@
+$color-parimary: #ff6801;
+$color-secondary: #f6f6ef;
+$color-white: #ffffff;
 body {
   margin: 0 auto;
   font-family: Roboto;
-  background-color: #f6f6ef;
+  background-color: $color-secondary;
 }
 #app {
   margin: 0;
 }
 header {
   background-color: #555555;
-  color: #ffffff;
+  color: $color-white;
   text-align: center;
   padding: 10px;
   font-size: 18px;
@@ -18,8 +21,8 @@ header {
   border-collapse: collapse;
   border: none;
   thead {
-    background-color: #ff6801;
-    color: #ffffff;
+    background-color: $color-parimary;
+    color: $color-white;
   }
   tbody,
   thead {
@@ -36,8 +39,23 @@ header {
   text-align: center;
 }
 .even {
-  background-color: #f6f6ef;
+  background-color: $color-secondary;
 }
 .odd {
   background-color: #e5e6df;
+}
+.pagination {
+  float: right;
+  padding: 10px;
+  button {
+    margin: 0 10px;
+    color: $color-parimary;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+  }
+  span {
+    color: $color-parimary;
+  }
 }
