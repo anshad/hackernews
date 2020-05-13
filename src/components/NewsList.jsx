@@ -70,9 +70,6 @@ class NewsList extends React.Component {
 
   render() {
     const { stories } = this.state;
-    if (!stories) {
-      return <h4 className='textCenter'>Loading...</h4>;
-    }
 
     return (
       <>
@@ -86,25 +83,25 @@ class NewsList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {stories.hits.length === 0 ? (
+            {!stories ||
+            typeof stories.hits === 'undefined' ||
+            stories.hits.length === 0 ? (
               <tr className='noRecords'>
                 <td colSpan={4} className='noRecords'>
                   No records found!
                 </td>
               </tr>
             ) : (
-              stories.hits.map((item, index) => {
-                return (
-                  <tr
-                    key={item.objectID}
-                    className={index % 2 === 0 ? 'even' : 'odd'}>
-                    <td className='textCenter'>{item.num_comments}</td>
-                    <td className='textCenter'>{item.points}</td>
-                    <td className='textCenter'>#</td>
-                    <td>{item.title}</td>
-                  </tr>
-                );
-              })
+              stories.hits.map((item, index) => (
+                <tr
+                  key={item.objectID}
+                  className={index % 2 === 0 ? 'even' : 'odd'}>
+                  <td className='textCenter'>{item.num_comments}</td>
+                  <td className='textCenter'>{item.points}</td>
+                  <td className='textCenter'>#</td>
+                  <td>{item.title}</td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
@@ -114,10 +111,15 @@ class NewsList extends React.Component {
   }
 }
 
+NewsList.defaultProps = {
+  staticContext: {},
+  match: {},
+};
+
 NewsList.propTypes = {
-  staticContext: PropTypes.shape({}).isRequired,
-  match: PropTypes.shape({}).isRequired,
-  history: PropTypes.shape({}).isRequired,
+  staticContext: PropTypes.shape({}),
+  match: PropTypes.shape({ params: PropTypes.shape({}) }),
+  history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
 };
 
 export default NewsList;

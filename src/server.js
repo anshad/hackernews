@@ -24,6 +24,11 @@ const IN_PROD = NODE_ENV === 'production';
 
   app.get('/favicon.ico', (req, res) => res.sendStatus(404));
 
+  app.use('/robots.txt', (req, res, next) => {
+    res.type('text/plain');
+    res.send('User-agent: *\nAllow: /');
+  });
+
   app.get('/*', async (req, res) => {
     let promise = Promise.resolve(null);
 
@@ -52,11 +57,14 @@ const IN_PROD = NODE_ENV === 'production';
         <head>
           <meta charset='utf-8'>
           <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+          <meta name='description' content='Hackernews clone built with react SSR'>
           <title>Hackernews</title>
-          <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
-          <link rel='stylesheet' href='/${
+          <link rel='preload' href='/${
             IN_PROD ? manifest['main.css'] : 'main.css'
-          }' />
+          }' as='style' onload='this.onload=null;this.rel="stylesheet"'>
+          <noscript><link rel='stylesheet' href='/${
+            IN_PROD ? manifest['main.css'] : 'main.css'
+          }'></noscript>
         </head>
         <body>
           <div id='app'>${html}</div>
